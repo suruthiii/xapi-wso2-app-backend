@@ -1,6 +1,7 @@
 package com.example.apimauth.service;
 
 import com.example.apimauth.dto.ApiImportResponse;
+import com.example.apimauth.dto.ApiListResponse;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -52,5 +53,18 @@ public class ApiService {
         } catch (IOException e) {
             throw new RuntimeException("Error processing file upload", e);
         }
+    }
+
+
+    public ApiListResponse getAllApis(String authHeader) {
+        return webClient.get()
+                .uri("/api/am/publisher/v4/apis")
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .retrieve()
+                .onStatus(status -> !status.is2xxSuccessful(),
+                        response -> response.bodyToMono(String.class)
+                                .flatMap(error -> Mono.error(new RuntimeException("Get APIs failed: " + error))))
+                .bodyToMono(ApiListResponse.class)
+                .block();
     }
 }

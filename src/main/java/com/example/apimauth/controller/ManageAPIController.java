@@ -1,12 +1,14 @@
 package com.example.apimauth.controller;
 
 import com.example.apimauth.dto.ApiImportResponse;
+import com.example.apimauth.dto.ApiListResponse;
 import com.example.apimauth.service.ApiService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/am/publisher/v4/apis")
 public class ManageAPIController {
@@ -29,6 +31,14 @@ public class ManageAPIController {
                 additionalProperties
         );
 
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiListResponse> getAllApis(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
+        ApiListResponse response = apiService.getAllApis(authHeader);
         return ResponseEntity.ok(response);
     }
 }
