@@ -1,5 +1,6 @@
 package com.example.apimauth.service;
 
+import com.example.apimauth.dto.ApiDetailResponse;
 import com.example.apimauth.dto.ApiImportResponse;
 import com.example.apimauth.dto.ApiListResponse;
 import org.springframework.core.io.ByteArrayResource;
@@ -65,6 +66,32 @@ public class ApiService {
                         response -> response.bodyToMono(String.class)
                                 .flatMap(error -> Mono.error(new RuntimeException("Get APIs failed: " + error))))
                 .bodyToMono(ApiListResponse.class)
+                .block();
+    }
+
+
+    public ApiDetailResponse getApiById(String apiId, String authHeader) {
+        return webClient.get()
+                .uri("/api/am/publisher/v4/apis/{apiId}", apiId)
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .retrieve()
+                .onStatus(status -> !status.is2xxSuccessful(),
+                        response -> response.bodyToMono(String.class)
+                                .flatMap(error -> Mono.error(new RuntimeException("Get API failed: " + error))))
+                .bodyToMono(ApiDetailResponse.class)
+                .block();
+    }
+
+
+    public void deleteApi(String apiId, String authHeader) {
+        webClient.delete()
+                .uri("/api/am/publisher/v4/apis/{apiId}", apiId)
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .retrieve()
+                .onStatus(status -> !status.is2xxSuccessful(),
+                        response -> response.bodyToMono(String.class)
+                                .flatMap(error -> Mono.error(new RuntimeException("Delete failed: " + error))))
+                .toBodilessEntity()
                 .block();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.apimauth.controller;
 
+import com.example.apimauth.dto.ApiDetailResponse;
 import com.example.apimauth.dto.ApiImportResponse;
 import com.example.apimauth.dto.ApiListResponse;
 import com.example.apimauth.service.ApiService;
@@ -40,5 +41,23 @@ public class ManageAPIController {
 
         ApiListResponse response = apiService.getAllApis(authHeader);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{apiId}")
+    public ResponseEntity<ApiDetailResponse> getApiById(
+            @PathVariable String apiId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
+        ApiDetailResponse response = apiService.getApiById(apiId, authHeader);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{apiId}")
+    public ResponseEntity<Void> deleteApi(
+            @PathVariable String apiId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
+        apiService.deleteApi(apiId, authHeader);
+        return ResponseEntity.noContent().build();
     }
 }
