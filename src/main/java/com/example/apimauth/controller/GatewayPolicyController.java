@@ -1,13 +1,12 @@
 package com.example.apimauth.controller;
 
-import com.example.apimauth.dto.GatewayPolicyDetailDTO;
-import com.example.apimauth.dto.GatewayPolicyListResponse;
-import com.example.apimauth.dto.GatewayPolicyRequest;
-import com.example.apimauth.dto.GatewayPolicyResponse;
+import com.example.apimauth.dto.*;
 import com.example.apimauth.service.GatewayPolicyService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -52,6 +51,26 @@ public class GatewayPolicyController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
 
         GatewayPolicyResponse response = policyService.engageGatewayPolicies(request, authHeader);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{policyId}/deploy")
+    public ResponseEntity<List<?>> deployGatewayPolicyMapping(
+            @PathVariable String policyId,
+            @RequestBody List<GatewayDeploymentRequest> deployments,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
+        List<?> response = policyService.deployGatewayPolicyMapping(policyId, deployments, authHeader);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{policyId}")
+    public ResponseEntity<GatewayPolicyDetailDTO> updateGatewayPolicy(
+            @PathVariable String policyId,
+            @RequestBody GatewayPolicyRequest request,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
+        GatewayPolicyDetailDTO response = policyService.updateGatewayPolicy(policyId, request, authHeader);
         return ResponseEntity.ok(response);
     }
 }

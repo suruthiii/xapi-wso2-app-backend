@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import java.util.List;
 
 @Service
 public class GatewayPolicyService {
@@ -64,6 +65,43 @@ public class GatewayPolicyService {
                         response -> response.bodyToMono(ErrorResponse.class)
                                 .flatMap(error -> Mono.error(new ApimIntegrationException(error, response.rawStatusCode()))))
                 .bodyToMono(GatewayPolicyResponse.class)
+                .block();
+    }
+
+    public List<?> deployGatewayPolicyMapping(
+            String policyId,
+            List<GatewayDeploymentRequest> deployments,
+            String authHeader) {
+
+        return webClient.post()
+                .uri("/api/am/publisher/v4/gateway-policies/{policyId}/deploy", policyId)
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(deployments)
+                .retrieve()
+                .onStatus(status -> !status.is2xxSuccessful(),
+                        response -> response.bodyToMono(ErrorResponse.class)
+                                .flatMap(error -> Mono.error(new ApimIntegrationException(error, response.rawStatusCode()))))
+                .bodyToFlux(Object.class)
+                .collectList()
+                .block();
+    }
+
+    public GatewayPolicyDetailDTO updateGatewayPolicy(
+            String policyId,
+            GatewayPolicyRequest request,
+            String authHeader) {
+
+        return webClient.put()
+                .uri("/api/am/publisher/v4/gateway-policies/{policyId}", policyId)
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .onStatus(status -> !status.is2xxSuccessful(),
+                        response -> response.bodyToMono(ErrorResponse.class)
+                                .flatMap(error -> Mono.error(new ApimIntegrationException(error, response.rawStatusCode()))))
+                .bodyToMono(GatewayPolicyDetailDTO.class)
                 .block();
     }
 }
