@@ -88,6 +88,34 @@ public class ApiService {
                 .block();
     }
 
+    public LifecycleStateResponse getLifecycleState(String apiId, String authHeader) {
+        return webClient.get()
+                .uri("/api/am/publisher/v4/apis/{apiId}/lifecycle-state", apiId)
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .retrieve()
+                .onStatus(status -> !status.is2xxSuccessful(),
+                        response -> response.bodyToMono(ErrorResponse.class)
+                                .flatMap(error -> Mono.error(new ApimIntegrationException(error, response.rawStatusCode()))))
+                .bodyToMono(LifecycleStateResponse.class)
+                .block();
+    }
+
+    public LifecycleUpdateResponse updateLifecycleState(String apiId, String action, String authHeader) {
+        return webClient.post()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/api/am/publisher/v4/apis/change-lifecycle")
+                        .queryParam("apiId", apiId)
+                        .queryParam("action", action)
+                        .build())
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .retrieve()
+                .onStatus(status -> !status.is2xxSuccessful(),
+                        response -> response.bodyToMono(ErrorResponse.class)
+                                .flatMap(error -> Mono.error(new ApimIntegrationException(error, response.rawStatusCode()))))
+                .bodyToMono(LifecycleUpdateResponse.class)
+                .block();
+    }
+
 
     // ------------------------------------- Manage Revisions -------------------------------------
 

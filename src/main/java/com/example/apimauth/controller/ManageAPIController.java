@@ -57,6 +57,24 @@ public class ManageAPIController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{apiId}/lifecycle-state")
+    public ResponseEntity<LifecycleStateResponse> getLifecycleState(
+            @PathVariable String apiId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
+        LifecycleStateResponse response = apiService.getLifecycleState(apiId, authHeader);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/change-lifecycle")
+    public ResponseEntity<LifecycleUpdateResponse> updateLifecycleState(
+            @RequestParam String apiId,
+            @RequestParam String action,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
+        LifecycleUpdateResponse response = apiService.updateLifecycleState(apiId, action, authHeader);
+        return ResponseEntity.ok(response);
+    }
 
 
     // ------------------------------------- Manage Revisions -------------------------------------
