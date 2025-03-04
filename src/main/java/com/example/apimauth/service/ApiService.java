@@ -1,6 +1,7 @@
 package com.example.apimauth.service;
 
 import com.example.apimauth.dto.*;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import com.example.apimauth.exception.ApimIntegrationException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -114,6 +116,47 @@ public class ApiService {
                                 .flatMap(error -> Mono.error(new ApimIntegrationException(error, response.rawStatusCode()))))
                 .bodyToMono(LifecycleUpdateResponse.class)
                 .block();
+    }
+
+    public ApiDetailResponse updateApi(String apiId, UpdateApiRequest request, String authHeader) {
+        return webClient.put()
+                .uri("/api/am/publisher/v4/apis/{apiId}", apiId)
+                .header(HttpHeaders.AUTHORIZATION, authHeader)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .onStatus(status -> !status.is2xxSuccessful(),
+                        response -> response.bodyToMono(ErrorResponse.class)
+                                .flatMap(error -> Mono.error(new ApimIntegrationException(error, response.rawStatusCode()))))
+                .bodyToMono(ApiDetailResponse.class)
+                .block();
+    }
+
+
+    public Map<String, Object> updateApiSwagger(String apiId, String authHeader, MultipartFile file) {
+        try {
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("apiDefinition", new ByteArrayResource(file.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return file.getOriginalFilename();
+                }
+            });
+
+            return webClient.put()
+                    .uri("/api/am/publisher/v4/apis/{apiId}/swagger", apiId)
+                    .header(HttpHeaders.AUTHORIZATION, authHeader)
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .body(BodyInserters.fromMultipartData(body))
+                    .retrieve()
+                    .onStatus(status -> !status.is2xxSuccessful(),
+                            response -> response.bodyToMono(ErrorResponse.class)
+                                    .flatMap(error -> Mono.error(new ApimIntegrationException(error, response.rawStatusCode()))))
+                    .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                    .block();
+        } catch (IOException e) {
+            throw new RuntimeException("Error processing file upload", e);
+        }
     }
 
 

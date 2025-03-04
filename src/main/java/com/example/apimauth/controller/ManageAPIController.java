@@ -3,11 +3,13 @@ package com.example.apimauth.controller;
 import com.example.apimauth.dto.*;
 import com.example.apimauth.service.ApiService;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -73,6 +75,26 @@ public class ManageAPIController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
 
         LifecycleUpdateResponse response = apiService.updateLifecycleState(apiId, action, authHeader);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{apiId}")
+    public ResponseEntity<ApiDetailResponse> updateApi(
+            @PathVariable String apiId,
+            @RequestBody UpdateApiRequest request,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+
+        ApiDetailResponse response = apiService.updateApi(apiId, request, authHeader);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping(value = "/{apiId}/swagger", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, Object>> updateApiSwagger(
+            @PathVariable String apiId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @RequestPart("apiDefinition") MultipartFile file) {
+
+        Map<String, Object> response = apiService.updateApiSwagger(apiId, authHeader, file);
         return ResponseEntity.ok(response);
     }
 
