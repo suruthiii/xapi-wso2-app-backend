@@ -1,6 +1,7 @@
 package com.example.apimauth.service;
 
 import com.example.apimauth.dto.*;
+import com.example.apimauth.dto.ManageGatewayPolicy.*;
 import com.example.apimauth.exception.ApimIntegrationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

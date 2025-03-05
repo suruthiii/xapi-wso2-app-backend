@@ -1,7 +1,7 @@
 package com.example.apimauth.controller;
 
-import com.example.apimauth.dto.PolicyDTO;
-import com.example.apimauth.dto.PolicyListResponse;
+import com.example.apimauth.dto.ManageOperationPolicy.PolicyDTO;
+import com.example.apimauth.dto.ManageOperationPolicy.PolicyListResponse;
 import com.example.apimauth.service.CommonOperationPolicyService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;

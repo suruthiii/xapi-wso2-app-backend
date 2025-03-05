@@ -1,8 +1,8 @@
 package com.example.apimauth.service;
 
 import com.example.apimauth.dto.ErrorResponse;
-import com.example.apimauth.dto.PolicyDTO;
-import com.example.apimauth.dto.PolicyListResponse;
+import com.example.apimauth.dto.ManageOperationPolicy.PolicyDTO;
+import com.example.apimauth.dto.ManageOperationPolicy.PolicyListResponse;
 import com.example.apimauth.exception.ApimIntegrationException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;

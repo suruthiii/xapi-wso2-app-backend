@@ -1,6 +1,7 @@
 package com.example.apimauth.service;
 
 import com.example.apimauth.dto.*;
+import com.example.apimauth.dto.ManageAPI.*;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;

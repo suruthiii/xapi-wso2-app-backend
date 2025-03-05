@@ -1,8 +1,8 @@
 package com.example.apimauth.controller;
 
-import com.example.apimauth.dto.StreamingThrottlingPolicyListResponse;
-import com.example.apimauth.dto.ThrottlingPolicyDTO;
-import com.example.apimauth.dto.ThrottlingPolicyListResponse;
+import com.example.apimauth.dto.ManageThrottlingPolicy.StreamingThrottlingPolicyListResponse;
+import com.example.apimauth.dto.ManageThrottlingPolicy.ThrottlingPolicyDTO;
+import com.example.apimauth.dto.ManageThrottlingPolicy.ThrottlingPolicyListResponse;
 import com.example.apimauth.service.ThrottlingPolicyService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

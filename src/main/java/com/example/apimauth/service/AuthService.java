@@ -1,8 +1,8 @@
 package com.example.apimauth.service;
 
-import com.example.apimauth.dto.ClientRegistrationRequest;
-import com.example.apimauth.dto.ClientRegistrationResponse;
-import com.example.apimauth.dto.TokenResponse;
+import com.example.apimauth.dto.Auth.ClientRegistrationRequest;
+import com.example.apimauth.dto.Auth.ClientRegistrationResponse;
+import com.example.apimauth.dto.Auth.TokenResponse;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;

@@ -1,6 +1,6 @@
 package com.example.apimauth.controller;
 
-import com.example.apimauth.dto.LoginRequest;
+import com.example.apimauth.dto.Auth.LoginRequest;
 import com.example.apimauth.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

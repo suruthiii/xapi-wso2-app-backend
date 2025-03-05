@@ -1,6 +1,6 @@
 package com.example.apimauth.controller;
 
-import com.example.apimauth.dto.*;
+import com.example.apimauth.dto.ManageGatewayPolicy.*;
 import com.example.apimauth.service.GatewayPolicyService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
